@@ -55,17 +55,19 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 // }
 // run().catch(console.dir);
 
+console.log("here");
 const MongoClient = require("mongodb").MongoClient;
 const atlasURI = `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/?retryWrites=true`;
 var database = new MongoClient(atlasURI);
 const userCollection = database.db(mongodb_database).collection('users');
+console.log("here1");
 var mongoStore = MongoStore.create({
 	mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/sessions`,
 	crypto: {
 		secret: mongodb_session_secret
 	}
 });
-
+console.log("here2");
 app.use(session({ 
   secret: node_session_secret,
   store: mongoStore, //default is memory store 
