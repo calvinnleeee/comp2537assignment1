@@ -51,7 +51,7 @@ app.use(session({
 // or a welcome message if logged in
 app.get('/', (req, res) => {
   // if user is not logged in: display this
-  if (!req.session.authentication) {
+  if (!req.session.authenticated) {
     res.send(
       `<a href="/signup"><button>Sign up</button></a><br/>` + 
       `<a href="/login"><button>Log in</button></a>`
