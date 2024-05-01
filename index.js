@@ -30,7 +30,7 @@ const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = `mongodb+srv:/${mongodb_user}:${mongodb_password}@${mongodb_host}/?retryWrites=true&w=majority&appName=comp2537`;
+const uri = `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/?retryWrites=true&w=majority&appName=comp2537`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
