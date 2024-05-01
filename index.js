@@ -29,6 +29,32 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = `mongodb+srv:/${mongodb_user}:${mongodb_password}@${mongodb_host}/?retryWrites=true&w=majority&appName=comp2537`;
+
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function run() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
+run().catch(console.dir);
+
 var {database} = include('databaseConnection');
 const userCollection = database.db(mongodb_database).collection('users');
 var mongoStore = MongoStore.create({
@@ -48,24 +74,16 @@ app.use(session({
 // 1. home page - displays links for signup/login if user is not logged in,
 // or a welcome message if logged in
 app.get('/', (req, res) => {
-  let eggs = true;
   // if user is not logged in: display this
-  if (eggs) {
+  if (!req.session.authentication) {
     res.send(
       `<a href="/signup"><button>Sign up</button></a><br/>` + 
       `<a href="/login"><button>Log in</button></a>`
     );
   }
-
-  // if user is logged in: display welcome message
+  // if user is logged in: redirect to memebers
   else {
-    // get user's name from session/db
-    let name = "big dick bobby";
-    res.send(
-      `<p>Hello, ${name}!</p>` + 
-      `<a href="/members"><button>Go to Members Area</button></a><br/>` + 
-      `<a href="/logout"><button>Logout</button></a>`
-    );
+    res.redirect(`/members`);
   };
 });
 
